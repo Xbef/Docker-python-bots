@@ -1,0 +1,77 @@
+---
+
+services:
+  
+  
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  python-bot2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-bot2
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/bot2
+    command: python bot2.py
+
+  python-bot3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-bot3
+    ports:
+      - "8002:8002"
+    volumes:
+      - .:/bot3
+    command: python bot3.py
+
+  python-bot4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-bot4
+    ports:
+      - "8003:8003"
+    volumes:
+      - .:/bot4
+    command: python bot4.py
+
+  python-bot5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-bot5
+    ports:
+      - "8004:8004"
+    volumes:
+      - .:/bot5
+    command: python bot5.py
+
+  python-bot6:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-bot6
+    ports:
+      - "8005:8005"
+    volumes:
+      - .:/bot6
+    command: python bot6.py
+
+
+
+
+
+volumes:
+  portainer_data:
