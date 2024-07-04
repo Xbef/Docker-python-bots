@@ -11,9 +11,10 @@ last_user = None
 consecutive_count = 0
 reset_count = 0
 counting_channel_name = "counting"  # Change this to the name of your counting channel
+general_channel_name = "general"   # Change this to the name of your general channel
 
 # Add your private channel ID here
-private_channel_id = 123456789012345678  # Replace with your private channel ID
+private_channel_id = 1258080887049027707  # Replace with your private channel ID
 
 @bot.event
 async def on_ready():
@@ -76,8 +77,8 @@ async def handle_reset(user, channel):
             reset_count = extract_reset_count(last_message_content)
         else:
             reset_count = 0
-        
         reset_count += 1
+        
         await private_channel.send(f'{user.mention} has reset the counter. It has been reset {reset_count} time(s).')
     
     # Notify the counting channel about the reset
@@ -112,16 +113,12 @@ async def purge_error(ctx, error):
         await ctx.send("Please specify a valid number of messages to delete.", delete_after=5)
 
 @bot.command()
-@commands.has_permissions(administrator=True)
-async def bottext(ctx, channel_id: int, *, message: str):
-    # Get the channel object based on the provided channel ID
-    channel = bot.get_channel(channel_id)
-    if channel:
-        await channel.send(message)
-    else:
-        await ctx.send("Invalid channel ID.")
+@commands.guild_only()
+async def bottext(ctx, *, message: str):
+    if ctx.channel.name == general_channel_name:
+        await ctx.message.delete()
+        await ctx.send(message)
 
-# Function to extract reset count from the message content
 def extract_reset_count(message_content):
     import re
     match = re.search(r'has been reset (\d+) time\(s\)', message_content)
